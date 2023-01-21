@@ -1,0 +1,15 @@
+server:
+  port: 8081
+
+spring:
+  boot:
+    admin:
+      notify:
+        opsgenie:
+          api-key: 0a32826f-335d-47b8-b6ac-28b3ed51b4fb
+  kafka:
+    consumer:
+      group-id: "default"
+
+topic:
+  name: frames
