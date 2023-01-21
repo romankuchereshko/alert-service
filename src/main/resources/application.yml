@@ -1,12 +1,14 @@
 server:
-  port: 8081
+  port: 8082
+
+rest:
+  client:
+    alert-rest-client:
+      url: https://api.opsgenie.com/v2/alerts
+      authorization-request-id: GenieKey 39699a7b-2731-443d-ac6e-bd4b6d97bba5
+      team-id: 94950924-6be6-4ccb-ac88-1c3232ed1d3d
 
 spring:
-  boot:
-    admin:
-      notify:
-        opsgenie:
-          api-key: 0a32826f-335d-47b8-b6ac-28b3ed51b4fb
   kafka:
     consumer:
       group-id: "default"
