@@ -5,13 +5,15 @@ rest:
   client:
     alert-rest-client:
       url: https://api.opsgenie.com/v2/alerts
-      authorization-request-id: GenieKey 39699a7b-2731-443d-ac6e-bd4b6d97bba5
-      team-id: 94950924-6be6-4ccb-ac88-1c3232ed1d3d
+      auth-request-id: GenieKey ${GENIE_KEY}
+      team-id: ${TEAM_ID}
+#      auth-request-id: ${GENIE_KEY}
+#      team-id: 94950924-6be6-4ccb-ac88-1c3232ed1d3d
 
 spring:
   kafka:
     consumer:
-      group-id: "default"
+      group-id: default
 
 topic:
   name: frames

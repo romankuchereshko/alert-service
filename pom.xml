@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.simulator</groupId>
-	<artifactId>alertservice</artifactId>
+	<artifactId>alert-service</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
 	<name>alertservice</name>
 	<description>Alert service to notify user about critical frames</description>

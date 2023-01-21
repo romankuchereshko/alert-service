@@ -27,7 +27,7 @@ public class AlertRestClientImpl implements AlertRestClient {
     @Value("${rest.client.alert-rest-client.url}")
     private String url;
 
-    @Value("${rest.client.alert-rest-client.authorization-request-id}")
+    @Value("${rest.client.alert-rest-client.auth-request-id}")
     private String authorizationRequestId;
 
     @Override
