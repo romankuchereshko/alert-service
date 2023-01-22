@@ -16,7 +16,7 @@ import com.simulator.alertservice.rest.dto.response.CreateAlertResponseDTO;
 import com.simulator.alertservice.service.FrameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import oil.station.domain.frame.Frame;
+import com.simulation.library.domain.Frame;
 
 @Slf4j
 @Component

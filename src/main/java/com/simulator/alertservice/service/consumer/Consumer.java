@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.simulation.library.domain.Frame;
 import com.simulator.alertservice.service.FrameService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import oil.station.domain.frame.Frame;
 
 @Slf4j
 @Component

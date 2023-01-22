@@ -2,7 +2,7 @@ package com.simulator.alertservice.service;
 
 import java.util.List;
 
-import oil.station.domain.frame.Frame;
+import com.simulation.library.domain.Frame;
 
 public interface FrameService {
 
