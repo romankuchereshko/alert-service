@@ -45,18 +45,24 @@ public class FrameServiceImpl implements FrameService {
         log.info("Got [{}] frames", frames.size());
 
         final List<Frame> criticalFrames = frames.stream().filter(Frame::getIsCritical).toList();
-        log.info("Try to create alert for [{}] critical frames", criticalFrames.size());
 
-        final List<CreateAlertResponseDTO> notCreatedAlerts = criticalFrames.stream()
-            .map(frame -> this.alertRestClient.createAlert(this.buildCreateAlertRequest(frame)))
-            .filter(Objects::isNull)
-            .toList();
+        if (!CollectionUtils.isEmpty(criticalFrames)) {
+            log.info("Try to create alert for [{}] critical frames", criticalFrames.size());
 
-        if (CollectionUtils.isEmpty(notCreatedAlerts)) {
-            log.info("Alerts for [{}] frames were created", criticalFrames.size());
+            final List<CreateAlertResponseDTO> notCreatedAlerts = criticalFrames.stream()
+                .map(frame -> this.alertRestClient.createAlert(this.buildCreateAlertRequest(frame)))
+                .filter(Objects::isNull)
+                .toList();
+
+            if (CollectionUtils.isEmpty(notCreatedAlerts)) {
+                log.info("Alerts for [{}] frames were created", criticalFrames.size());
+            } else {
+                log.info("Alerts for [{}] frames weren't created", notCreatedAlerts.size());
+            }
         } else {
-            log.info("Alerts for [{}] frames weren't created", notCreatedAlerts.size());
+            log.info("Alerts will not be created, frames have not critical values");
         }
+
     }
 
     private CreateAlertRequestDTO buildCreateAlertRequest(final Frame frame) {

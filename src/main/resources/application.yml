@@ -12,6 +12,5 @@ spring:
   kafka:
     consumer:
       group-id: second_group
-
-topic:
-  name: frames
+    topic:
+      alert-topic: alert_frames
