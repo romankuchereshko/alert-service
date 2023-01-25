@@ -2,12 +2,16 @@ package com.simulator.alertservice.service.impl;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
+import com.simulation.library.domain.Frame;
+import com.simulator.alertservice.exception.FrameException;
 import com.simulator.alertservice.rest.dto.client.AlertRestClient;
 import com.simulator.alertservice.rest.dto.request.CreateAlertRequestDTO;
 import com.simulator.alertservice.rest.dto.request.ResponderDTO;
@@ -16,7 +20,6 @@ import com.simulator.alertservice.rest.dto.response.CreateAlertResponseDTO;
 import com.simulator.alertservice.service.FrameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import com.simulation.library.domain.Frame;
 
 @Slf4j
 @Component
@@ -42,27 +45,29 @@ public class FrameServiceImpl implements FrameService {
 
     @Override
     public void createAlert(final List<Frame> frames) {
-        log.info("Got [{}] frames", frames.size());
-
-        final List<Frame> criticalFrames = frames.stream().filter(Frame::getIsCritical).toList();
-
-        if (!CollectionUtils.isEmpty(criticalFrames)) {
-            log.info("Try to create alert for [{}] critical frames", criticalFrames.size());
-
-            final List<CreateAlertResponseDTO> notCreatedAlerts = criticalFrames.stream()
-                .map(frame -> this.alertRestClient.createAlert(this.buildCreateAlertRequest(frame)))
-                .filter(Objects::isNull)
-                .toList();
-
-            if (CollectionUtils.isEmpty(notCreatedAlerts)) {
-                log.info("Alerts for [{}] frames were created", criticalFrames.size());
-            } else {
-                log.info("Alerts for [{}] frames weren't created", notCreatedAlerts.size());
-            }
-        } else {
-            log.info("Alerts will not be created, frames have not critical values");
+        if (Objects.isNull(frames) || frames.isEmpty()) {
+            final String message = String.format("Invalid frames %s", frames);
+            log.info(message);
+            throw new FrameException(message);
         }
 
+        final Map<Long, Frame> frameMap = frames.stream()
+            .collect(Collectors.toMap(Frame::getId, Function.identity()));
+
+        log.info("Trying to create alerts for critical frames [{}]", frameMap.keySet());
+        final List<CreateAlertResponseDTO> failedAlerts = frameMap.values()
+            .stream()
+            .map(frame -> this.alertRestClient.createAlert(this.buildCreateAlertRequest(frame)))
+            .filter(Objects::isNull)
+            .toList();
+
+        if (failedAlerts.isEmpty()) {
+            log.info("Alerts for frames [{}] were created", frameMap.keySet());
+        } else {
+            final String message = String.format("Alerts for %s frames weren't created", failedAlerts.size());
+            log.info(message);
+            throw new FrameException(message);
+        }
     }
 
     private CreateAlertRequestDTO buildCreateAlertRequest(final Frame frame) {

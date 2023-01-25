@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.simulator</groupId>
 	<artifactId>alert-service</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<name>alertservice</name>
 	<description>Alert service to notify user about critical frames</description>
 	<properties>
