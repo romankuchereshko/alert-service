@@ -54,7 +54,7 @@ public class FrameServiceImpl implements FrameService {
         final Map<Long, Frame> frameMap = frames.stream()
             .collect(Collectors.toMap(Frame::getId, Function.identity()));
 
-        log.info("Trying to create alerts for critical frames [{}]", frameMap.keySet());
+        log.info("Trying to create alerts for critical frames ids=[{}]", frameMap.keySet());
         final List<CreateAlertResponseDTO> failedAlerts = frameMap.values()
             .stream()
             .map(frame -> this.alertRestClient.createAlert(this.buildCreateAlertRequest(frame)))
@@ -62,7 +62,7 @@ public class FrameServiceImpl implements FrameService {
             .toList();
 
         if (failedAlerts.isEmpty()) {
-            log.info("Alerts for frames [{}] were created", frameMap.keySet());
+            log.info("Alerts for frames ids=[{}] were created", frameMap.keySet());
         } else {
             final String message = String.format("Alerts for %s frames weren't created", failedAlerts.size());
             log.info(message);
@@ -92,6 +92,7 @@ public class FrameServiceImpl implements FrameService {
 
     private String buildFrameDescription(final Frame frame) {
         final String frameData = String.join(", ",
+            String.format("frame id: %s", frame.getId()),
             String.format("well id: %s", frame.getWellId()),
             String.format("voltage: %s", frame.getVoltage()),
             String.format("electric current: %s", frame.getCurrent()),
